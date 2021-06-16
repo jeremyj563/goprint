@@ -1,28 +1,35 @@
 package goprint
 
-import(          
-     "reflect"
-     "syscall"
-     "unsafe"
-     "io/ioutil"
-     "fmt"
-     "strings"
+import (
+	"fmt"
+	"io/ioutil"
+	"reflect"
+	"strings"
+	"syscall"
+	"unsafe"
 )
 
 var(
-     dll = syscall.MustLoadDLL("winspool.drv")
-     getDefaultPrinter = dll.MustFindProc("GetDefaultPrinterW")
-     openPrinter = dll.MustFindProc("OpenPrinterW")
-     startDocPrinter = dll.MustFindProc("StartDocPrinterW")
-     startPagePrinter = dll.MustFindProc("StartPagePrinter")
-     writePrinter = dll.MustFindProc("WritePrinter")
-     endPagePrinter = dll.MustFindProc("EndPagePrinter")
-     endDocPrinter = dll.MustFindProc("EndDocPrinter")
-     closePrinter= dll.MustFindProc("ClosePrinter")    
-     procEnumPrintersW = dll.MustFindProc("EnumPrintersW") 
-     documentProperties = dll.MustFindProc("DocumentPropertiesW")
-     getPrinter = dll.MustFindProc("GetPrinterW")
-     setPrinter = dll.MustFindProc("SetPrinterW")
+	winspool = syscall.MustLoadDLL("winspool.drv")
+	getDefaultPrinter = winspool.MustFindProc("GetDefaultPrinterW")
+	openPrinter = winspool.MustFindProc("OpenPrinterW")
+	startDocPrinter = winspool.MustFindProc("StartDocPrinterW")
+	startPagePrinter = winspool.MustFindProc("StartPagePrinter")
+	writePrinter = winspool.MustFindProc("WritePrinter")
+	endPagePrinter = winspool.MustFindProc("EndPagePrinter")
+	endDocPrinter = winspool.MustFindProc("EndDocPrinter")
+	closePrinter= winspool.MustFindProc("ClosePrinter")    
+	procEnumPrintersW = winspool.MustFindProc("EnumPrintersW") 
+	documentProperties = winspool.MustFindProc("DocumentPropertiesW")
+	getPrinter = winspool.MustFindProc("GetPrinterW")
+	setPrinter = winspool.MustFindProc("SetPrinterW")
+
+	gdi32 = syscall.MustLoadDLL("gdi32.dll")
+	createDCProc = gdi32.MustFindProc("CreateDCW")
+	resetDCProc = gdi32.MustFindProc("ResetDCW")
+	deleteDCProc = gdi32.MustFindProc("DeleteDC")
+	getDeviceCapsProc = gdi32.MustFindProc("GetDeviceCaps")
+	startDocProc = gdi32.MustFindProc("StartDocW")
 )
 
 // DOCINFO struct.
